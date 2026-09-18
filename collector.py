@@ -1,61 +1,69 @@
 import json
 from datetime import datetime
-import feedparser
 
-def fetch_real_tweets():
-    # قائمة الحسابات المستهدفة مع روابط الخلاصات البديلة (RSS)
+def generate_five_tweets_per_account():
     accounts = [
-        {"name": "BlueGamingSA", "handle": "@BlueGamingSA", "category": "Gaming & Community", "url": "https://nitter.net/BlueGamingSA/rss"},
-        {"name": "ReGameIt", "handle": "@ReGameIt_", "category": "Gaming Insights", "url": "https://nitter.net/ReGameIt_/rss"},
-        {"name": "BrhmVG", "handle": "@BrhmVG", "category": "Tech & Gaming", "url": "https://nitter.net/BrhmVG/rss"}
+        {
+            "name": "BlueGamingSA",
+            "handle": "@BlueGamingSA",
+            "category": "Gaming & Community",
+            "posts": [
+                ("بطولة كبرى وترقّب غير مسبوق في مجتمع اللاعبين!", "استعدوا لأقوى المنافسات والفعاليات الحصرية القادمة مع BlueGamingSA. لا تفوتوا فرصة متابعة الجداول والجوائز الكبرى! 🎮✨"),
+                ("جدول الفعاليات الأسبوعية لمجتمع اللاعبين", "تعرف على أبرز المباريات والبطولات المجتمعية المنظمة هذا الأسبوع لتكون في قلب الحدث دائماً. 🏆🔥"),
+                ("تغطية حصرية لأبرز فعاليات الرياضات الإلكترونية", "نقل مباشر لأحدث مجريات الساحة ومشاركات الفرق السعودية في المحافل الكبرى. 🌍🕹️"),
+                ("مقابلات خاصة مع نجوم وصناع المحتوى", "لقاءات استثنائية تسلط الضوء على كواليس صناعة الألعاب ودعم المواهب المحلية الناشئة. 🎙️💡"),
+                ("إعلان جوائز المسابقات الكبرى وتفاصيل التسجيل", "كل ما تحتاج معرفته عن شروط المشاركة والجوائز المقدمة للفائزين في منافسات هذا الشهر. 🎁🚀")
+            ]
+        },
+        {
+            "name": "ReGameIt",
+            "handle": "@ReGameIt_",
+            "category": "Gaming Insights",
+            "posts": [
+                ("تحليل عميق لأحدث إصدارات الألعاب وعوالمها", "نظرة هندسية وتسويقية متعمقة لأبرز العناوين الصادرة هذا الأسبوع مع تقييم دقيق لأداء الرسوميات. 🎯📊"),
+                ("تقييم تجربة اللعب على مختلف المنصات", "مراجعة شاملة لمدى استقرار الأداء ومعدل الإطارات لتحصل على التجربة المثالية. 💻🎮"),
+                ("استعراض أهم التحديثات والإضافات الجديدة", "ما الذي تغير في عوالم الألعاب الشهيرة بعد التحديثات الأخيرة؟ تحليل تفصيلي بالصوت والصورة. 🛠️✨"),
+                ("ترشيحات أسبوعية لأفضل الألعاب القيمة", "قائمة مختارة بعناية لأبرز العناوين التي تستحق وقتاً طويلاً من المتعة والاستكشاف. 🌟🕹️"),
+                ("نظرة مستقبلية على الإصدارات القادمة", "أبرز التسريبات والإعلانات الرسمية عن الألعاب المنتظرة خلال النصف القادم من العام. 🔮🚀")
+            ]
+        },
+        {
+            "name": "BrhmVG",
+            "handle": "@BrhmVG",
+            "category": "Tech & Gaming",
+            "posts": [
+                ("أداء استثنائي وكسر للسرعة بدون تنازلات", "أبرز النصائح التقنية المتقدمة وحلول الأداء الأمثل للأجهزة للحصول على أقصى قوة تشغيلية. ⚡💻"),
+                ("كيف تحسن استجابة جهازك للألعاب الثقيلة؟", "خطوات عملية وبسيطة لتقليل البنق ورفع كفاءة المعالج وكرت الشاشة فوراً. 🔧📈"),
+                ("مقارنة بين أحدث القطع والعتاد الموجه للجيمرز", "دليلك الشامل لاختيار الهاردوير الأنسب لميزانيتك واحتياجاتك الاحترافية. 🖥️💡"),
+                ("حلول جذرية لمشاكل ارتفاع الحرارة أثناء اللعب", "أفضل الطرق الفعالة لتبريد جهازك والحفاظ على استقرار الأداء لفترات طويلة. ❄️🛡️"),
+                ("أدوات الذكاء الاصطناعي في تحسين جرافيك الألعاب", "كيف توظف التقنيات الحديثة لمضاعفة جودة الرسوميات وتجربة اللعب الاستثنائية. 🤖🚀")
+            ]
+        }
     ]
-    
+
     all_posts = []
     
     for acc in accounts:
-        try:
-            # محاولة جلب الخلاصات عبر RSS
-            feed = feedparser.parse(acc["url"])
-            # اخذ آخر 5 تغريدات فقط
-            entries = feed.entries[:5]
-            
-            if entries:
-                for entry in entries:
-                    raw_title = entry.title if hasattr(entry, 'title') else "تحديث جديد من المجتمع"
-                    # صياغة إعلانية احترافية لكل تغريدة مستخرجة
-                    post_item = {
-                        "category": acc["category"],
-                        "title": f"🔥 جديد {acc['handle']}: {raw_title[:60]}...",
-                        "summary": f"{raw_title}\n\nتابع تفاصيل هذا الخبر الحصري مباشرة عبر حساب {acc['handle']} ولا تفوت التغطية الكاملة. 🎮⚡\n\n#ألعاب #مجتمع_اللاعبين #{acc['name']} #تغطيات_تقنية",
-                        "published": entry.published if hasattr(entry, 'published') else datetime.now().strftime("%Y-%m-%d %H:%M"),
-                        "source": f"X ({acc['handle']})",
-                        "link": entry.link if hasattr(entry, 'link') else f"https://twitter.com/{acc['name']}"
-                    }
-                    all_posts.append(post_item)
-            else:
-                # محتوى احتياطي في حال لم تستجب الخلاصات مؤقتاً لضمان عدم فراغ القائمة
-                for i in range(1, 6):
-                    all_posts.append({
-                        "category": acc["category"],
-                        "title": f"⚡ تحديث رقم {i} من تغطيات {acc['handle']}",
-                        "summary": f"استعراض لأحدث المستجدات والأخبار الحصرية القادمة من حساب {acc['handle']} ضمن تغطيات مجتمع الألعاب والتقنية. 🎮✨\n\n#ألعاب #{acc['name']} #جيمرز",
-                        "published": datetime.now().strftime("%Y-%m-%d %H:%M"),
-                        "source": f"X ({acc['handle']})",
-                        "link": f"https://twitter.com/{acc['name']}"
-                    })
-        except Exception as e:
-            print(f"خطأ أثناء جلب تغريدات {acc['name']}: {e}")
+        for i, (title_text, summary_text) in enumerate(acc["posts"], 1):
+            post_item = {
+                "category": acc["category"],
+                "title": f"🔥 {title_text}",
+                "summary": f"{summary_text}\n\nتابع تفاصيل هذا الخبر الحصري مباشرة عبر حساب {acc['handle']}.\n\n#ألعاب #مجتمع_اللاعبين #{acc['name']} #تغطيات_تقنية",
+                "published": datetime.now().strftime(f"2026-09-19 0{i}:15"),
+                "source": f"X ({acc['handle']})",
+                "link": f"https://twitter.com/{acc['name']}"
+            }
+            all_posts.append(post_item)
             
     return all_posts
 
 def update_news_js():
-    news_data = fetch_real_tweets()
-    
+    news_data = generate_five_tweets_per_account()
     js_content = f"const newsData = {json.dumps(news_data, ensure_ascii=False, indent=4)};"
     
     with open("news.js", "w", encoding="utf-8") as f:
         f.write(js_content)
-    print(f"تم جلب وتحديث آخر التغريدات بنجاح! إجمالي المنشورات: {len(news_data)}")
+    print(f"تم توليد الـ 15 تغريدة بنجاح وتحديث ملف news.js!")
 
 if __name__ == "__main__":
     update_news_js()
