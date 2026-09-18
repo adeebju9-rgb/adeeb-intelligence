@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مذكرة أبو أديب الذكية | Adeeb Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="hero-section">
+        <div class="container">
+            <h1>Adeeb Intelligence</h1>
+            <p class="date-badge">📅 الجمعة، 18 سبتمبر 2026</p>
+        </div>
+    </header>
+
+    <main class="container grid-layout">
+        
+        <!-- قسم الأخبار والذكاء الاصطناعي -->
+        <section class="feed-column">
+            <h2>🧠 أحدث المعلومات والأخبار</h2>
+            <div id="news-container">
+                <!-- ستظهر الأخبار هنا تلقائياً -->
+            </div>
+        </section>
+
+        <!-- قسم المذكرة الشخصية -->
+        <section class="notes-column">
+            <h2>📝 مفكرتي اليومية</h2>
+            <div class="note-box">
+                <ul>
+                    <li>✨ تشغيل سكربت البايثون وتوليد ملف الأخبار بنجاح.</li>
+                    <li>🎨 اعتماد الثيم الداكن ولمسات التصميم الراقية.</li>
+                    <li>🚀 الاستعداد لرفع المشروع على GitHub.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>تم الإنشاء بحب وبدون تعقيد عبر PowerShell — Abu Adeeb © 2026</p>
+    </footer>
+
+    <!-- جلب ملف الأخبار وعرضه مباشرة -->
+    <script src="news.js"></script>
+    <script>
+        const container = document.getElementById('news-container');
+        
+        if (typeof newsData !== 'undefined' && newsData.length > 0) {
+            container.innerHTML = '';
+            newsData.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <span class="category-tag">${article.category}</span>
+                    <h3>${article.title}</h3>
+                    <p>${article.summary}</p>
+                    <div class="meta-info">
+                        <span>🕒 ${article.published}</span>
+                        <span>📌 المصدر: ${article.source}</span>
+                        <a href="${article.link}" target="_blank">قراءة الخبر</a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = '<p style="color: #f85149;">تأكد من تشغيل ملف collector.py أولاً لتوليد الأخبار.</p>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+:root {
+    --bg-color: #0d1117;
+    --card-bg: #161b22;
+    --text-color: #c9d1d9;
+    --accent-color: #58a6ff;
+    --border-color: #30363d;
+    --font-family: system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.hero-section {
+    border-bottom: 1px solid var(--border-color);
+    padding: 30px 0;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.hero-section h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.date-badge {
+    color: var(--accent-color);
+    font-size: 0.95rem;
+    margin-top: 8px;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+h2 {
+    font-size: 1.25rem;
+    color: #ffffff;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--accent-color);
+}
+
+.category-tag {
+    background-color: rgba(88, 166, 255, 0.15);
+    color: var(--accent-color);
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.card h3 {
+    margin: 12px 0 8px 0;
+    font-size: 1.1rem;
+    color: #ffffff;
+}
+
+.card p {
+    font-size: 0.9rem;
+    color: #8b949e;
+}
+
+.meta-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    margin-top: 15px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+    color: #8b949e;
+}
+
+.meta-info a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.meta-info a:hover {
+    text-decoration: underline;
+}
+
+.note-box {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.note-box ul {
+    margin: 0;
+    padding-right: 20px;
+}
+
+.note-box li {
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+}
+
+footer {
+    text-align: center;
+    padding: 40px 0;
+    border-top: 1px solid var(--border-color);
+    color: #8b949e;
+    font-size: 0.85rem;
+    margin-top: 40px;
+}
