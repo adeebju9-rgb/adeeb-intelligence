@@ -133,11 +133,30 @@
             transform: translateY(-2px);
         }
 
+        .tweet-section-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .tweet-original {
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
         .tweet-text {
             font-size: 0.9rem;
             line-height: 1.6;
             margin-bottom: 10px;
             word-break: break-word;
+            color: #fff;
         }
 
         .tweet-actions {
@@ -228,7 +247,7 @@
     <script src="news.js"></script>
 
     <script>
-        // تجميع البيانات بحيث يتم أخذ آخر 5 أخبار لكل حساب بدقة من ملف news.js
+        // قراءة وتنسيق البيانات: حفظ التغريدة الأساسية والمغذاة/المحسنة لكل عنصر (آخر 5 أخبار)
         function getInitialStructuredData() {
             if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData)) {
                 const structured = {};
@@ -239,11 +258,13 @@
                     if (!structured[accountName]) {
                         structured[accountName] = [];
                     }
-                    // إضافة محتوى الخبر أو النص المعزز
-                    structured[accountName].push(item.enhanced || item.title || item.summary);
+                    
+                    structured[accountName].push({
+                        original: item.title || "لا توجد تغريدة أساسية متاحة",
+                        enhanced: item.enhanced || item.summary || "لا توجد تغريدة محسنة متاحة"
+                    });
                 });
 
-                // تقييد كل حساب بآخر 5 أخبار فقط كحد أقصى بناءً على طلبك
                 const limitedStructured = {};
                 for (const [account, list] of Object.entries(structured)) {
                     limitedStructured[account] = list.slice(0, 5);
@@ -251,16 +272,25 @@
                 return limitedStructured;
             }
             
-            // بيانات احتياطية في حال لم يتم تحميل ملف news.js لأي سبب
+            // بيانات احتياطية تجريبية
             return {
                 "@BlueGamingSA": [
-                    "🔥 عاجل: الإعلان رسمياً عن موعد إطلاق النسخة التجريبية المفتوحة لأقوى لعبة تقمص أدوار منتظرة هذا العام! #ألعاب"
+                    {
+                        original: "الإعلان رسمياً عن موعد إطلاق اللعبة التجريبية.",
+                        enhanced: "🔥 عاجل: الإعلان رسمياً عن موعد إطلاق النسخة التجريبية المفتوحة لأقوى لعبة تقمص أدوار منتظرة هذا العام! #ألعاب"
+                    }
                 ],
                 "@ReGameIt_": [
-                    "🕹️ نظرة عميقة على تطور جرافيك الألعاب وكيف أصبحت محركات الـ Unreal Engine تضاهي الواقع السينمائي!"
+                    {
+                        original: "تطور جرافيك الألعاب باستخدام محركات جديدة.",
+                        enhanced: "🕹️ نظرة عميقة على تطور جرافيك الألعاب وكيف أصبحت محركات الـ Unreal Engine تضاهي الواقع السينمائي!"
+                    }
                 ],
                 "@BrhmVG": [
-                    "🚀 تصاميم عوالم خيالية جديدة تخطف الأنظار.. استعراض فني لأجمل الخلفيات البصرية."
+                    {
+                        original: "تصاميم عوالم خيالية جديدة.",
+                        enhanced: "🚀 تصاميم عوالم خيالية جديدة تخطف الأنظار.. استعراض فني لأجمل الخلفيات البصرية."
+                    }
                 ]
             };
         }
@@ -284,22 +314,27 @@
             const container = document.getElementById('accounts-container');
             container.innerHTML = '';
 
-            for (const [account, tweets] of Object.entries(tweetsData)) {
+            for (const [account, items] of Object.entries(tweetsData)) {
                 let columnHTML = `
                     <div class="account-column">
                         <div class="account-header">
                             <span>${account}</span>
-                            <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${tweets.length} منشورات</span>
+                            <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${items.length} منشورات</span>
                         </div>
                 `;
 
-                tweets.forEach((tweet, index) => {
+                items.forEach((item, index) => {
                     columnHTML += `
                         <div class="tweet-card" id="card-${account}-${index}">
                             <div class="tweet-content-area" id="content-${account}-${index}">
-                                <div class="tweet-text">${tweet}</div>
+                                <div class="tweet-section-title">التغريدة الأساسية (المصدر):</div>
+                                <div class="tweet-original">${item.original}</div>
+                                
+                                <div class="tweet-section-title">التغريدة المحسنة:</div>
+                                <div class="tweet-text">${item.enhanced}</div>
+                                
                                 <div class="tweet-actions">
-                                    <button onclick="copyTweet('${account}', ${index})">نسخ</button>
+                                    <button onclick="copyTweet('${account}', ${index})">نسخ المحسنة</button>
                                     <button onclick="startEdit('${account}', ${index})">تعديل</button>
                                     <button class="delete-btn" onclick="deleteTweet('${account}', ${index})">حذف</button>
                                 </div>
@@ -314,18 +349,23 @@
         }
 
         function copyTweet(account, index) {
-            const text = tweetsData[account][index];
+            const text = tweetsData[account][index].enhanced;
             navigator.clipboard.writeText(text).then(() => {
-                showToast('تم نسخ النص بنجاح!');
+                showToast('تم نسخ التغريدة المحسنة بنجاح!');
             });
         }
 
         function startEdit(account, index) {
             const cardArea = document.getElementById(`content-${account}-${index}`);
-            const currentText = tweetsData[account][index];
+            const currentItem = tweetsData[account][index];
             
             cardArea.innerHTML = `
-                <textarea class="edit-input" id="input-${account}-${index}">${currentText}</textarea>
+                <div class="tweet-section-title">تعديل التغريدة الأساسية:</div>
+                <textarea class="edit-input" id="orig-input-${account}-${index}">${currentItem.original}</textarea>
+                
+                <div class="tweet-section-title">تعديل التغريدة المحسنة:</div>
+                <textarea class="edit-input" id="enh-input-${account}-${index}">${currentItem.enhanced}</textarea>
+                
                 <div class="tweet-actions">
                     <button onclick="saveEdit('${account}', ${index})">حفظ</button>
                     <button class="delete-btn" onclick="render()">إلغاء</button>
@@ -334,14 +374,17 @@
         }
 
         function saveEdit(account, index) {
-            const newText = document.getElementById(`input-${account}-${index}`).value;
-            if (newText.trim() !== "") {
-                tweetsData[account][index] = newText.trim();
+            const newOrig = document.getElementById(`orig-input-${account}-${index}`).value;
+            const newEnh = document.getElementById(`enh-input-${account}-${index}`).value;
+            
+            if (newEnh.trim() !== "") {
+                tweetsData[account][index].original = newOrig.trim();
+                tweetsData[account][index].enhanced = newEnh.trim();
                 saveData();
                 render();
                 showToast('تم حفظ التعديل بنجاح!');
             } else {
-                showToast('لا يمكن أن يكون النص فارغاً!');
+                showToast('لا يمكن أن تكون التغريدة المحسنة فارغة!');
             }
         }
 
