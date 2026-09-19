@@ -72,6 +72,24 @@
         header p {
             color: var(--text-muted);
             font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        .refresh-data-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .refresh-data-btn:hover {
+            background-color: #059669;
         }
 
         .container {
@@ -248,6 +266,8 @@
     <header>
         <h1>مركز محتوى أخبار الألعاب والرياضات الإلكترونية</h1>
         <p>التحديث الآلي الذكي عبر GitHub Actions (متوافق مع الجوال)</p>
+        <!-- زر مباشر لإجبار النظام على جلب أحدث بيانات من ملف news.js وتحديث الصفحة -->
+        <button class="refresh-data-btn" onclick="forceRefreshData()">🔄 تحديث البيانات من ملف المصدر (news.js)</button>
     </header>
 
     <div class="container">
@@ -256,18 +276,17 @@
         </div>
     </div>
 
-    <div id="toast" class="toast">تم النسخ بنجاح!</div>
+    <div id="toast" class="toast">تم التحديث بنجاح!</div>
 
     <!-- استدعاء ملف البيانات المحدث آلياً -->
     <script src="news.js"></script>
 
     <script>
-        // دالة استخراج البيانات المباشرة من ملف news.js لضمان التطابق التام
-        function getFreshDataFromNewsJS() {
-            if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData)) {
+        // دالة معالجة واستخراج البيانات من ملف news.js بدقة تامة
+        function loadDataFromNewsJS() {
+            if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData) && dualNewsData.length > 0) {
                 const structured = {};
                 dualNewsData.forEach(item => {
-                    // استخراج اسم الحساب من حقل المصدر (مثل: @BlueGamingSA)
                     const match = item.source ? item.source.match(/\((@[^)]+)\)/) : null;
                     const accountName = match ? match[1] : (item.source || "@GamingHub");
                     
@@ -275,7 +294,7 @@
                         structured[accountName] = [];
                     }
                     
-                    // جلب النص الأصلي الحقيقي بدقة وتجنب أي قيم افتراضية قديمة
+                    // جلب النص الأصلي الحقيقي والنص المحسن التسويقي بدقة من الـ JSON المعالج آلياً
                     const originalText = item.original || item.text || item.content || item.title || "التغريدة الأصلية غير متوفرة";
                     const enhancedText = item.enhanced || item.summary || "التغريدة المحسنة غير متوفرة";
 
@@ -287,22 +306,22 @@
 
                 const limitedStructured = {};
                 for (const [account, list] of Object.entries(structured)) {
-                    limitedStructured[account] = list.slice(0, 5); // أحدث 5 تغريدات لكل حساب
+                    limitedStructured[account] = list.slice(0, 5); // أحدث 5 تغريدات
                 }
                 return limitedStructured;
             }
             return null;
         }
 
-        // التحقق من البيانات: إذا توفرت بيانات حقيقية من news.js يتم اعتمادها مباشرة وتحديث الذاكرة
+        // إجبار النظام على اعتماد بيانات news.js الجديدة وتجاوز التخزين المؤقت القديم
         let tweetsData = null;
-        const freshData = getFreshDataFromNewsJS();
+        const newsDataParsed = loadDataFromNewsJS();
 
-        if (freshData && Object.keys(freshData).length > 0) {
-            tweetsData = freshData;
-            localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData)); // تحديث الذاكرة المحلية بالبيانات الحقيقية الجديدة
+        if (newsDataParsed) {
+            tweetsData = newsDataParsed;
+            localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData)); // حفظ البيانات الحقيقية المطابقة
         } else {
-            // محاولة القراءة من الذاكرة المحلية كبديل مؤقت إذا لم يتم تحميل ملف news.js بعد
+            // بيانات احتياطية في حال تعذر تحميل ملف news.js مؤقتاً
             tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || {
                 "@BlueGamingSA": [
                     {
@@ -311,6 +330,20 @@
                     }
                 ]
             };
+        }
+
+        // زر التحديث اليدوي القسري
+        function forceRefreshData() {
+            localStorage.removeItem('gamingTweetsData'); // مسح الذاكرة القديمة بالكامل
+            const fresh = loadDataFromNewsJS();
+            if (fresh) {
+                tweetsData = fresh;
+                localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
+                render();
+                showToast('تم تحديث البيانات وجلب أحدث التغريدات بنجاح!');
+            } else {
+                showToast('تعذر العثور على بيانات جديدة في ملف news.js');
+            }
         }
 
         function saveData() {
@@ -323,7 +356,7 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 2000);
+            }, 2500);
         }
 
         function render() {
@@ -388,7 +421,7 @@
                 <div class="tweet-actions">
                     <button onclick="saveEdit('${account}', ${index})">حفظ</button>
                     <button class="delete-btn" onclick="render()">إلغاء</button>
-                </div>
+                    </div>
             `;
         }
 
