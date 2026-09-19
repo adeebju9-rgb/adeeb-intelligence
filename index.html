@@ -247,7 +247,7 @@
     <script src="news.js"></script>
 
     <script>
-        // قراءة وتنسيق البيانات: حفظ التغريدة الأساسية والمغذاة/المحسنة لكل عنصر (آخر 5 أخبار)
+        // قراءة وتنسيق البيانات بدقة من ملف news.js مع استخراج التغريدة الأساسية والمحسنة
         function getInitialStructuredData() {
             if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData)) {
                 const structured = {};
@@ -259,9 +259,13 @@
                         structured[accountName] = [];
                     }
                     
+                    // استخراج التغريدة الأساسية من عدة احتمالات محتملة في البيانات الواردة
+                    const originalText = item.original || item.title || item.text || item.content || item.summary || "التغريدة الأصلية غير متوفرة";
+                    const enhancedText = item.enhanced || item.summary || item.text || "التغريدة المحسنة غير متوفرة";
+
                     structured[accountName].push({
-                        original: item.title || "لا توجد تغريدة أساسية متاحة",
-                        enhanced: item.enhanced || item.summary || "لا توجد تغريدة محسنة متاحة"
+                        original: originalText,
+                        enhanced: enhancedText
                     });
                 });
 
