@@ -119,6 +119,18 @@
             align-items: center;
         }
 
+        /* تنسيق رابط اسم الحساب ليصبح تفاعلياً وأنيقاً */
+        .account-header a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .account-header a:hover {
+            color: #60a5fa;
+            text-decoration: underline;
+        }
+
         .tweet-card {
             background: rgba(11, 15, 25, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -259,7 +271,6 @@
                         structured[accountName] = [];
                     }
                     
-                    // استخراج التغريدة الأساسية من عدة احتمالات محتملة في البيانات الواردة
                     const originalText = item.original || item.title || item.text || item.content || item.summary || "التغريدة الأصلية غير متوفرة";
                     const enhancedText = item.enhanced || item.summary || item.text || "التغريدة المحسنة غير متوفرة";
 
@@ -319,10 +330,14 @@
             container.innerHTML = '';
 
             for (const [account, items] of Object.entries(tweetsData)) {
+                // إزالة علامة @ من اسم الحساب لإنشاء رابط صحيح لمنصة إكس (تويتر)
+                const cleanAccountName = account.startsWith('@') ? account.substring(1) : account;
+                const profileUrl = `https://x.com/${cleanAccountName}`;
+
                 let columnHTML = `
                     <div class="account-column">
                         <div class="account-header">
-                            <span>${account}</span>
+                            <span><a href="${profileUrl}" target="_blank" title="زيارة حساب المصدر على إكس">${account}</a></span>
                             <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${items.length} منشورات</span>
                         </div>
                 `;
