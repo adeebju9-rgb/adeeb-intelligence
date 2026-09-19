@@ -228,21 +228,27 @@
     <script src="news.js"></script>
 
     <script>
-        // دمج البيانات القادمة من ملف news.js (DualNewsData) مع التخزين المحلي لوظائف التعديل والحذف
+        // تجميع البيانات بحيث يتم أخذ آخر 5 أخبار لكل حساب بدقة من ملف news.js
         function getInitialStructuredData() {
-            if (typeof dualNewsData !== 'undefined') {
+            if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData)) {
                 const structured = {};
                 dualNewsData.forEach(item => {
-                    // استخلاص اسم الحساب من حقل المصدر مثل X (@BlueGamingSA)
-                    const match = item.source.match(/\((@[^)]+)\)/);
-                    const accountName = match ? match[1] : "@GamingHub";
+                    const match = item.source ? item.source.match(/\((@[^)]+)\)/) : null;
+                    const accountName = match ? match[1] : (item.source || "@GamingHub");
                     
                     if (!structured[accountName]) {
                         structured[accountName] = [];
                     }
-                    structured[accountName].push(item.enhanced || item.title);
+                    // إضافة محتوى الخبر أو النص المعزز
+                    structured[accountName].push(item.enhanced || item.title || item.summary);
                 });
-                return structured;
+
+                // تقييد كل حساب بآخر 5 أخبار فقط كحد أقصى بناءً على طلبك
+                const limitedStructured = {};
+                for (const [account, list] of Object.entries(structured)) {
+                    limitedStructured[account] = list.slice(0, 5);
+                }
+                return limitedStructured;
             }
             
             // بيانات احتياطية في حال لم يتم تحميل ملف news.js لأي سبب
