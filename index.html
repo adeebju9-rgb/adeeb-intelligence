@@ -117,17 +117,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+            z-index: 5;
         }
 
-        /* تنسيق رابط اسم الحساب ليصبح تفاعلياً وأنيقاً */
+        /* تعديل رابط اسم الحساب لضمان التفاعل التام والوضوح */
         .account-header a {
-            color: var(--accent-color);
+            color: #60a5fa !important;
             text-decoration: none;
-            transition: color 0.2s ease;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
         }
 
         .account-header a:hover {
-            color: #60a5fa;
+            color: #93c5fd !important;
             text-decoration: underline;
         }
 
@@ -259,7 +263,6 @@
     <script src="news.js"></script>
 
     <script>
-        // قراءة وتنسيق البيانات بدقة من ملف news.js مع استخراج التغريدة الأساسية والمحسنة
         function getInitialStructuredData() {
             if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData)) {
                 const structured = {};
@@ -287,7 +290,6 @@
                 return limitedStructured;
             }
             
-            // بيانات احتياطية تجريبية
             return {
                 "@BlueGamingSA": [
                     {
@@ -330,14 +332,13 @@
             container.innerHTML = '';
 
             for (const [account, items] of Object.entries(tweetsData)) {
-                // إزالة علامة @ من اسم الحساب لإنشاء رابط صحيح لمنصة إكس (تويتر)
                 const cleanAccountName = account.startsWith('@') ? account.substring(1) : account;
                 const profileUrl = `https://x.com/${cleanAccountName}`;
 
                 let columnHTML = `
                     <div class="account-column">
                         <div class="account-header">
-                            <span><a href="${profileUrl}" target="_blank" title="زيارة حساب المصدر على إكس">${account}</a></span>
+                            <span><a href="${profileUrl}" target="_blank" rel="noopener noreferrer" title="زيارة حساب المصدر على إكس">${account}</a></span>
                             <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${items.length} منشورات</span>
                         </div>
                 `;
@@ -416,7 +417,6 @@
             }
         }
 
-        // تشغيل العرض عند تحميل الصفحة
         render();
     </script>
 </body>
