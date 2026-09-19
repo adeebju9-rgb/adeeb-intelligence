@@ -32,7 +32,6 @@
             padding: 10px;
         }
 
-        /* الخلفية الثابتة الاحترافية مع تدرج داكن */
         .static-background {
             position: fixed;
             top: 0;
@@ -214,44 +213,53 @@
 
     <header>
         <h1>مركز محتوى أخبار الألعاب والرياضات الإلكترونية</h1>
-        <p>لوحة التحكم والتغريدات التفاعلية المباشرة (متوافقة مع الجوال)</p>
+        <p>التحديث الآلي الذكي عبر GitHub Actions (متوافق مع الجوال)</p>
     </header>
 
     <div class="container">
         <div class="accounts-grid" id="accounts-container">
-            <!-- سيتم تعبئة التغريدات برمجياً -->
+            <!-- سيتم تعبئة المحتوى برمجياً من ملف news.js -->
         </div>
     </div>
 
     <div id="toast" class="toast">تم النسخ بنجاح!</div>
 
-    <script>
-        const initialData = {
-            "@BlueGamingSA": [
-                "🔥 عاجل: الإعلان رسمياً عن موعد إطلاق النسخة التجريبية المفتوحة لأقوى لعبة تقمص أدوار منتظرة هذا العام! استعدوا للمواجهة. #ألعاب #BlueGaming",
-                "⚡ بطولات الرياضات الإلكترونية تشتعل! تعرف على الجدول الزمني للمباريات الكبرى القادمة وكيف تأهلت الفرق العربية. #Esports",
-                "🎮 نصيحة تقنية اليوم: كيف تحسن سرعة استجابة الشاشة (Response Time) لتعزيز أدائك في ألعاب التصويب. #تطوير_الألعاب",
-                "🌟 استعراض سريع لأبرز الإضافات والمحتوى القادم للعبة السنة.. تفاصيل ومفاجآت حماسية تنتظر اللاعبين! #Gaming",
-                "💡 ما هو اللقب أو الشخصية المفضلة لديك في عالم ألعاب القتال؟ شاركنا برأيك في التعليقات! #مجتمع_اللاعبين"
-            ],
-            "@ReGameIt_": [
-                "🕹️ نظرة عميقة على تطور جرافيك الألعاب وكيف أصبحت محركات الـ Unreal Engine تضاهي الواقع السينمائي! #ReGameIt",
-                "🏆 ملخص أسبوعي لأهم صفقات وانتقالات محترفي الرياضات الإلكترونية على مستوى الشرق الأوسط والعالم. #GamingNews",
-                "🔥 مقارنة سريعة بين أداء كرت الشاشة الجيل الجديد والجيل السابق.. هل تستحق التحديث الآن؟ #تقنية",
-                "🎯 تحليل لأهم الاستراتيجيات الفائزة في البطولات العالمية الأخيرة للـ Esports. كونوا على خط الاستعداد! #بطولات",
-                "✨ تجارب الأداء الأولى للواقع الافتراضي الجديد.. هل نقترب من عصر الانغماس التام؟ #VR"
-            ],
-            "@BrhmVG": [
-                "🚀 تصاميم عوالم خيالية جديدة تخطف الأنظار.. استعراض فني لأجمل الخلفيات البصرية في عالم الألعاب. #BrhmVG",
-                "💎 حصريات المتاجر الرقمية لهذا الأسبوع: تخفيضات كبرى لا تفوتوها على أشهر العناوين! #تخفيضات_ألعاب",
-                "🎮 خلف كواليس تطوير الألعاب المستقلة (Indie Games).. إبداع بلا حدود بأبسط الإمكانيات. #ألعاب_مستقلة",
-                "🔥 كيف تؤثر الموسيقى التصويرية على حماس اللاعب واندماج قصة اللعبة؟ موضوع شيق للنقاش! #Soundtrack",
-                "🌟 شكراً لدعمكم المستمر لمجتمعنا التقني والرياضي.. القادم أقوى وأجمل بإذن الله! #GamingCommunity"
-            ]
-        };
+    <!-- استدعاء ملف البيانات المحدث آلياً -->
+    <script src="news.js"></script>
 
-        // تحميل البيانات من الـ LocalStorage أو استخدام البيانات الافتراضية
-        let tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || initialData;
+    <script>
+        // دمج البيانات القادمة من ملف news.js (DualNewsData) مع التخزين المحلي لوظائف التعديل والحذف
+        function getInitialStructuredData() {
+            if (typeof dualNewsData !== 'undefined') {
+                const structured = {};
+                dualNewsData.forEach(item => {
+                    // استخلاص اسم الحساب من حقل المصدر مثل X (@BlueGamingSA)
+                    const match = item.source.match(/\((@[^)]+)\)/);
+                    const accountName = match ? match[1] : "@GamingHub";
+                    
+                    if (!structured[accountName]) {
+                        structured[accountName] = [];
+                    }
+                    structured[accountName].push(item.enhanced || item.title);
+                });
+                return structured;
+            }
+            
+            // بيانات احتياطية في حال لم يتم تحميل ملف news.js لأي سبب
+            return {
+                "@BlueGamingSA": [
+                    "🔥 عاجل: الإعلان رسمياً عن موعد إطلاق النسخة التجريبية المفتوحة لأقوى لعبة تقمص أدوار منتظرة هذا العام! #ألعاب"
+                ],
+                "@ReGameIt_": [
+                    "🕹️ نظرة عميقة على تطور جرافيك الألعاب وكيف أصبحت محركات الـ Unreal Engine تضاهي الواقع السينمائي!"
+                ],
+                "@BrhmVG": [
+                    "🚀 تصاميم عوالم خيالية جديدة تخطف الأنظار.. استعراض فني لأجمل الخلفيات البصرية."
+                ]
+            };
+        }
+
+        let tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || getInitialStructuredData();
 
         function saveData() {
             localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
@@ -275,7 +283,7 @@
                     <div class="account-column">
                         <div class="account-header">
                             <span>${account}</span>
-                            <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${tweets.length} تغريدات</span>
+                            <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${tweets.length} منشورات</span>
                         </div>
                 `;
 
@@ -302,7 +310,7 @@
         function copyTweet(account, index) {
             const text = tweetsData[account][index];
             navigator.clipboard.writeText(text).then(() => {
-                showToast('تم نسخ التغريدة بنجاح!');
+                showToast('تم نسخ النص بنجاح!');
             });
         }
 
@@ -327,20 +335,20 @@
                 render();
                 showToast('تم حفظ التعديل بنجاح!');
             } else {
-                showToast('لا يمكن أن تكون التغريدة فارغة!');
+                showToast('لا يمكن أن يكون النص فارغاً!');
             }
         }
 
         function deleteTweet(account, index) {
-            if (confirm('هل أنت متأكد من حذف هذه التغريدة؟')) {
+            if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
                 tweetsData[account].splice(index, 1);
                 saveData();
                 render();
-                showToast('تم حذف التغريدة بنجاح.');
+                showToast('تم حذف العنصر بنجاح.');
             }
         }
 
-        // التهيئة عند التشغيل
+        // تشغيل العرض عند تحميل الصفحة
         render();
     </script>
 </body>
