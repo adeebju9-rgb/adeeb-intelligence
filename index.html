@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة أخبار الألعاب والرياضات الإلكترونية | Gaming Hub</title>
+    <title>مركز أديب لمحتوى أخبار الألعاب والرياضات الإلكترونية | Gaming Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -264,9 +264,9 @@
     <div class="bg-overlay"></div>
 
     <header>
-        <h1>مركز محتوى أخبار الألعاب والرياضات الإلكترونية</h1>
+        <!-- تم تعديل العنوان الرئيسي هنا ليحمل اسمك الكريم -->
+        <h1>مركز أديب لمحتوى أخبار الألعاب والرياضات الإلكترونية</h1>
         <p>التحديث الآلي الذكي عبر GitHub Actions (متوافق مع الجوال)</p>
-        <!-- زر مباشر لإجبار النظام على جلب أحدث بيانات من ملف news.js وتحديث الصفحة -->
         <button class="refresh-data-btn" onclick="forceRefreshData()">🔄 تحديث البيانات من ملف المصدر (news.js)</button>
     </header>
 
@@ -282,7 +282,6 @@
     <script src="news.js"></script>
 
     <script>
-        // دالة معالجة واستخراج البيانات من ملف news.js بدقة تامة
         function loadDataFromNewsJS() {
             if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData) && dualNewsData.length > 0) {
                 const structured = {};
@@ -294,7 +293,6 @@
                         structured[accountName] = [];
                     }
                     
-                    // جلب النص الأصلي الحقيقي والنص المحسن التسويقي بدقة من الـ JSON المعالج آلياً
                     const originalText = item.original || item.text || item.content || item.title || "التغريدة الأصلية غير متوفرة";
                     const enhancedText = item.enhanced || item.summary || "التغريدة المحسنة غير متوفرة";
 
@@ -306,22 +304,20 @@
 
                 const limitedStructured = {};
                 for (const [account, list] of Object.entries(structured)) {
-                    limitedStructured[account] = list.slice(0, 5); // أحدث 5 تغريدات
+                    limitedStructured[account] = list.slice(0, 5);
                 }
                 return limitedStructured;
             }
             return null;
         }
 
-        // إجبار النظام على اعتماد بيانات news.js الجديدة وتجاوز التخزين المؤقت القديم
         let tweetsData = null;
         const newsDataParsed = loadDataFromNewsJS();
 
         if (newsDataParsed) {
             tweetsData = newsDataParsed;
-            localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData)); // حفظ البيانات الحقيقية المطابقة
+            localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
         } else {
-            // بيانات احتياطية في حال تعذر تحميل ملف news.js مؤقتاً
             tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || {
                 "@BlueGamingSA": [
                     {
@@ -332,9 +328,8 @@
             };
         }
 
-        // زر التحديث اليدوي القسري
         function forceRefreshData() {
-            localStorage.removeItem('gamingTweetsData'); // مسح الذاكرة القديمة بالكامل
+            localStorage.removeItem('gamingTweetsData');
             const fresh = loadDataFromNewsJS();
             if (fresh) {
                 tweetsData = fresh;
@@ -421,7 +416,7 @@
                 <div class="tweet-actions">
                     <button onclick="saveEdit('${account}', ${index})">حفظ</button>
                     <button class="delete-btn" onclick="render()">إلغاء</button>
-                    </div>
+                </div>
             `;
         }
 
