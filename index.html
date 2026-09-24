@@ -1,450 +1,430 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مركز أديب لمحتوى أخبار الألعاب والرياضات الإلكترونية | Gaming Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0b0f19;
-            --card-bg: rgba(17, 24, 39, 0.85);
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --border-color: rgba(59, 130, 246, 0.3);
-        }
+  * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Tajawal', sans-serif;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
+    body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+        padding: 10px;
+    }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            padding: 10px;
-        }
+    .static-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        z-index: -2;
+    }
 
-        .static-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            z-index: -2;
-        }
+    .bg-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(11, 15, 25, 0.95) 0%, rgba(17, 24, 39, 0.90) 100%);
+        z-index: -1;
+    }
 
-        .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: linear-gradient(135deg, rgba(11, 15, 25, 0.95) 0%, rgba(17, 24, 39, 0.90) 100%);
-            z-index: -1;
-        }
+    header {
+        text-align: center;
+        padding: 25px 10px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
 
-        header {
-            text-align: center;
-            padding: 25px 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
+    header h1 {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 8px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
 
-        header h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
+    header p {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+    }
 
-        header p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 12px;
-        }
+    .refresh-data-btn {
+        background-color: #10b981;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.2s;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    }
 
-        .refresh-data-btn {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
-        }
+    .refresh-data-btn:hover {
+        background-color: #059669;
+    }
 
-        .refresh-data-btn:hover {
-            background-color: #059669;
-        }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 5px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 5px;
-        }
+    .accounts-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
 
+    @media (min-width: 768px) {
         .accounts-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
         }
-
-        @media (min-width: 768px) {
-            .accounts-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            header h1 {
-                font-size: 2.2rem;
-            }
-            body {
-                padding: 20px;
-            }
+        header h1 {
+            font-size: 2.2rem;
         }
-
-        .account-column {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        body {
+            padding: 20px;
         }
+    }
 
-        .account-header {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 5;
-        }
+    .account-column {
+        background: var(--card-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
 
-        .account-header a {
-            color: #60a5fa !important;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-block;
-        }
+    .account-header {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 5;
+    }
 
-        .account-header a:hover {
-            color: #93c5fd !important;
-            text-decoration: underline;
-        }
+    .account-header a {
+        color: #60a5fa !important;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-block;
+    }
 
-        .tweet-card {
-            background: rgba(11, 15, 25, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 12px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
+    .account-header a:hover {
+        color: #93c5fd !important;
+        text-decoration: underline;
+    }
 
-        .tweet-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-2px);
-        }
+    .tweet-card {
+        background: rgba(11, 15, 25, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
 
-        .tweet-section-title {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+    .tweet-card:hover {
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+    }
 
-        .tweet-original {
-            font-size: 0.85rem;
-            color: #d1d5db;
-            margin-bottom: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-            line-height: 1.5;
-            word-break: break-word;
-        }
+    .tweet-section-title {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
 
-        .tweet-text {
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 10px;
-            word-break: break-word;
-            color: #fff;
-        }
+    .tweet-original {
+        font-size: 0.85rem;
+        color: #d1d5db;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        line-height: 1.5;
+        word-break: break-word;
+    }
 
-        .tweet-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
+    .tweet-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 10px;
+        word-break: break-word;
+        color: #fff;
+    }
 
-        button {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background-color 0.2s;
-            flex: 1;
-            min-width: 70px;
-        }
+    .tweet-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
 
-        button:hover {
-            background-color: var(--accent-hover);
-        }
+    button {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.2s;
+        flex: 1;
+        min-width: 70px;
+    }
 
-        button.delete-btn {
-            background-color: #ef4444;
-        }
+    button:hover {
+        background-color: var(--accent-hover);
+    }
 
-        button.delete-btn:hover {
-            background-color: #dc2626;
-        }
+    button.delete-btn {
+        background-color: #ef4444;
+    }
 
-        .edit-input {
-            width: 100%;
-            background: #1f2937;
-            color: #fff;
-            border: 1px solid var(--accent-color);
-            border-radius: 6px;
-            padding: 8px;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            resize: vertical;
-            min-height: 70px;
-            font-family: 'Tajawal', sans-serif;
-        }
+    button.delete-btn:hover {
+        background-color: #dc2626;
+    }
 
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #10b981;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
+    .edit-input {
+        width: 100%;
+        background: #1f2937;
+        color: #fff;
+        border: 1px solid var(--accent-color);
+        border-radius: 6px;
+        padding: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        resize: vertical;
+        min-height: 70px;
+        font-family: 'Tajawal', sans-serif;
+    }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-    </style>
-</head>
-<body>
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #10b981;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+    }
 
-    <div class="static-background"></div>
-    <div class="bg-overlay"></div>
+    .toast.show {
+        transform: translateX(-50%) translateY(0);
+    }
+</style>
 
-    <header>
-        <!-- تم تعديل العنوان الرئيسي هنا ليحمل اسمك الكريم -->
-        <h1>مركز أديب لمحتوى أخبار الألعاب والرياضات الإلكترونية</h1>
-        <p>التحديث الآلي الذكي عبر GitHub Actions (متوافق مع الجوال)</p>
-        <button class="refresh-data-btn" onclick="forceRefreshData()">🔄 تحديث البيانات من ملف المصدر (news.js)</button>
-    </header>
 
-    <div class="container">
-        <div class="accounts-grid" id="accounts-container">
-            <!-- سيتم تعبئة المحتوى برمجياً من ملف news.js -->
-        </div>
+<div class="static-background"></div>
+<div class="bg-overlay"></div>
+
+<header>
+    <!-- تم تعديل العنوان الرئيسي هنا ليحمل اسمك الكريم -->
+    <h1>مركز أديب لمحتوى أخبار الألعاب والرياضات الإلكترونية</h1>
+    <p>التحديث الآلي الذكي عبر GitHub Actions (متوافق مع الجوال)</p>
+    <button class="refresh-data-btn" onclick="forceRefreshData()">🔄 تحديث البيانات من ملف المصدر (news.js)</button>
+</header>
+
+<div class="container">
+    <div class="accounts-grid" id="accounts-container">
+        <!-- سيتم تعبئة المحتوى برمجياً من ملف news.js -->
     </div>
+</div>
 
-    <div id="toast" class="toast">تم التحديث بنجاح!</div>
+<div id="toast" class="toast">تم التحديث بنجاح!</div>
 
-    <!-- استدعاء ملف البيانات المحدث آلياً -->
-    <script src="news.js"></script>
+<!-- استدعاء ملف البيانات المحدث آلياً -->
+<script src="news.js"></script>
 
-    <script>
-        function loadDataFromNewsJS() {
-            if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData) && dualNewsData.length > 0) {
-                const structured = {};
-                dualNewsData.forEach(item => {
-                    const match = item.source ? item.source.match(/\((@[^)]+)\)/) : null;
-                    const accountName = match ? match[1] : (item.source || "@GamingHub");
-                    
-                    if (!structured[accountName]) {
-                        structured[accountName] = [];
-                    }
-                    
-                    const originalText = item.original || item.text || item.content || item.title || "التغريدة الأصلية غير متوفرة";
-                    const enhancedText = item.enhanced || item.summary || "التغريدة المحسنة غير متوفرة";
-
-                    structured[accountName].push({
-                        original: originalText,
-                        enhanced: enhancedText
-                    });
-                });
-
-                const limitedStructured = {};
-                for (const [account, list] of Object.entries(structured)) {
-                    limitedStructured[account] = list.slice(0, 5);
+<script>
+    function loadDataFromNewsJS() {
+        if (typeof dualNewsData !== 'undefined' && Array.isArray(dualNewsData) && dualNewsData.length > 0) {
+            const structured = {};
+            dualNewsData.forEach(item => {
+                const match = item.source ? item.source.match(/\((@[^)]+)\)/) : null;
+                const accountName = match ? match[1] : (item.source || "@GamingHub");
+                
+                if (!structured[accountName]) {
+                    structured[accountName] = [];
                 }
-                return limitedStructured;
+                
+                const originalText = item.original || item.text || item.content || item.title || "التغريدة الأصلية غير متوفرة";
+                const enhancedText = item.enhanced || item.summary || "التغريدة المحسنة غير متوفرة";
+
+                structured[accountName].push({
+                    original: originalText,
+                    enhanced: enhancedText
+                });
+            });
+
+            const limitedStructured = {};
+            for (const [account, list] of Object.entries(structured)) {
+                // أخذ آخر عنصر فقط (أحدث تغريدة) لكل موقع
+                limitedStructured[account] = list.slice(-1);
             }
-            return null;
+            return limitedStructured;
         }
+        return null;
+    }
 
-        let tweetsData = null;
-        const newsDataParsed = loadDataFromNewsJS();
+    let tweetsData = null;
+    const newsDataParsed = loadDataFromNewsJS();
 
-        if (newsDataParsed) {
-            tweetsData = newsDataParsed;
+    if (newsDataParsed) {
+        tweetsData = newsDataParsed;
+        localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
+    } else {
+        tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || {
+            "@BlueGamingSA": [
+                {
+                    original: "لعبة Venom أكثر لعبة منتظرينها جمهور PlayStation و بفارغ الصبر 🔥",
+                    enhanced: "🔥 منتظرو PlayStation على موعد مع حماس لا ينتهي! لعبة Venom قادمة لتشعل حماس عالم الألعاب بتجربة استثنائية لا تُوضف. استعدوا للملحمة القادمة! 🎮✨ #PlayStation #Venom"
+                }
+            ]
+        };
+    }
+
+    function forceRefreshData() {
+        localStorage.removeItem('gamingTweetsData');
+        const fresh = loadDataFromNewsJS();
+        if (fresh) {
+            tweetsData = fresh;
             localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
+            render();
+            showToast('تم تحديث البيانات وجلب أحدث التغريدات بنجاح!');
         } else {
-            tweetsData = JSON.parse(localStorage.getItem('gamingTweetsData')) || {
-                "@BlueGamingSA": [
-                    {
-                        original: "لعبة Venom أكثر لعبة منتظرينها جمهور PlayStation و بفارغ الصبر 🔥",
-                        enhanced: "🔥 منتظرو PlayStation على موعد مع حماس لا ينتهي! لعبة Venom قادمة لتشعل حماس عالم الألعاب بتجربة استثنائية لا تُوضف. استعدوا للملحمة القادمة! 🎮✨ #PlayStation #Venom"
-                    }
-                ]
-            };
+            showToast('تعذر العثور على بيانات جديدة في ملف news.js');
         }
+    }
 
-        function forceRefreshData() {
-            localStorage.removeItem('gamingTweetsData');
-            const fresh = loadDataFromNewsJS();
-            if (fresh) {
-                tweetsData = fresh;
-                localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
-                render();
-                showToast('تم تحديث البيانات وجلب أحدث التغريدات بنجاح!');
-            } else {
-                showToast('تعذر العثور على بيانات جديدة في ملف news.js');
-            }
-        }
+    function saveData() {
+        localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
+    }
 
-        function saveData() {
-            localStorage.setItem('gamingTweetsData', JSON.stringify(tweetsData));
-        }
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.1 = toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2500);
+    }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2500);
-        }
+    function render() {
+        const container = document.getElementById('accounts-container');
+        container.innerHTML = '';
 
-        function render() {
-            const container = document.getElementById('accounts-container');
-            container.innerHTML = '';
+        for (const [account, items] of Object.entries(tweetsData)) {
+            const cleanAccountName = account.startsWith('@') ? account.substring(1) : account;
+            const profileUrl = `https://x.com/${cleanAccountName}`;
 
-            for (const [account, items] of Object.entries(tweetsData)) {
-                const cleanAccountName = account.startsWith('@') ? account.substring(1) : account;
-                const profileUrl = `https://x.com/${cleanAccountName}`;
+            let columnHTML = `
+                <div class="account-column">
+                    <div class="account-header">
+                        <span><a href="${profileUrl}" target="_blank" rel="noopener noreferrer" title="زيارة حساب المصدر على إكس">${account}</a></span>
+                        <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">آخر تغريدة</span>
+                    </div>
+            `;
 
-                let columnHTML = `
-                    <div class="account-column">
-                        <div class="account-header">
-                            <span><a href="${profileUrl}" target="_blank" rel="noopener noreferrer" title="زيارة حساب المصدر على إكس">${account}</a></span>
-                            <span style="font-size:0.8rem; background:rgba(59,130,246,0.2); padding:2px 8px; border-radius:10px;">${items.length} منشورات</span>
-                        </div>
-                `;
-
-                items.forEach((item, index) => {
-                    columnHTML += `
-                        <div class="tweet-card" id="card-${account}-${index}">
-                            <div class="tweet-content-area" id="content-${account}-${index}">
-                                <div class="tweet-section-title">التغريدة الأساسية (المصدر):</div>
-                                <div class="tweet-original">${item.original}</div>
-                                
-                                <div class="tweet-section-title">التغريدة المحسنة:</div>
-                                <div class="tweet-text">${item.enhanced}</div>
-                                
-                                <div class="tweet-actions">
-                                    <button onclick="copyTweet('${account}', ${index})">نسخ المحسنة</button>
-                                    <button onclick="startEdit('${account}', ${index})">تعديل</button>
-                                    <button class="delete-btn" onclick="deleteTweet('${account}', ${index})">حذف</button>
-                                </div>
+            items.forEach((item, index) => {
+                columnHTML += `
+                    <div class="tweet-card" id="card-${account}-${index}">
+                        <div class="tweet-content-area" id="content-${account}-${index}">
+                            <div class="tweet-section-title">التغريدة الأساسية (المصدر):</div>
+                            <div class="tweet-original">${item.original}</div>
+                            
+                            <div class="tweet-section-title">التغريدة المحسنة:</div>
+                            <div class="tweet-text">${item.enhanced}</div>
+                            
+                            <div class="tweet-actions">
+                                <button onclick="copyTweet('${account}', ${index})">نسخ المحسنة</button>
+                                <button onclick="startEdit('${account}', ${index})">تعديل</button>
+                                <button class="delete-btn" onclick="deleteTweet('${account}', ${index})">حذف</button>
                             </div>
                         </div>
-                    `;
-                });
-
-                columnHTML += `</div>`;
-                container.innerHTML += columnHTML;
-            }
-        }
-
-        function copyTweet(account, index) {
-            const text = tweetsData[account][index].enhanced;
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('تم نسخ التغريدة المحسنة بنجاح!');
+                    </div>
+                `;
             });
-        }
 
-        function startEdit(account, index) {
-            const cardArea = document.getElementById(`content-${account}-${index}`);
-            const currentItem = tweetsData[account][index];
+            columnHTML += `</div>`;
+            container.innerHTML += columnHTML;
+        }
+    }
+
+    function copyTweet(account, index) {
+        const text = tweetsData[account][index].enhanced;
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('تم نسخ التغريدة المحسنة بنجاح!');
+        });
+    }
+
+    function startEdit(account, index) {
+        const cardArea = document.getElementById(`content-${account}-${index}`);
+        const currentItem = tweetsData[account][index];
+        
+        cardArea.innerHTML = `
+            <div class="tweet-section-title">تعديل التغريدة الأساسية:</div>
+            <textarea class="edit-input" id="orig-input-${account}-${index}">${currentItem.original}</textarea>
             
-            cardArea.innerHTML = `
-                <div class="tweet-section-title">تعديل التغريدة الأساسية:</div>
-                <textarea class="edit-input" id="orig-input-${account}-${index}">${currentItem.original}</textarea>
-                
-                <div class="tweet-section-title">تعديل التغريدة المحسنة:</div>
-                <textarea class="edit-input" id="enh-input-${account}-${index}">${currentItem.enhanced}</textarea>
-                
-                <div class="tweet-actions">
-                    <button onclick="saveEdit('${account}', ${index})">حفظ</button>
-                    <button class="delete-btn" onclick="render()">إلغاء</button>
-                </div>
-            `;
-        }
-
-        function saveEdit(account, index) {
-            const newOrig = document.getElementById(`orig-input-${account}-${index}`).value;
-            const newEnh = document.getElementById(`enh-input-${account}-${index}`).value;
+            <div class="tweet-section-title">تعديل التغريدة المحسنة:</div>
+            <textarea class="edit-input" id="enh-input-${account}-${index}">${currentItem.enhanced}</textarea>
             
-            if (newEnh.trim() !== "") {
-                tweetsData[account][index].original = newOrig.trim();
-                tweetsData[account][index].enhanced = newEnh.trim();
-                saveData();
-                render();
-                showToast('تم حفظ التعديل بنجاح!');
-            } else {
-                showToast('لا يمكن أن تكون التغريدة المحسنة فارغة!');
-            }
-        }
+            <div class="tweet-actions">
+                <button onclick="saveEdit('${account}', ${index})">حفظ</button>
+                <button class="delete-btn" onclick="render()">إلغاء</button>
+            </div>
+        `;
+    }
 
-        function deleteTweet(account, index) {
-            if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
-                tweetsData[account].splice(index, 1);
-                saveData();
-                render();
-                showToast('تم حذف العنصر بنجاح.');
-            }
+    function saveEdit(account, index) {
+        const newOrig = document.getElementById(`orig-input-${account}-${index}`).value;
+        const newEnh = document.getElementById(`enh-input-${account}-${index}`).value;
+        
+        if (newEnh.trim() !== "") {
+            tweetsData[account][index].original = newOrig.trim();
+            tweetsData[account][index].enhanced = newEnh.trim();
+            saveData();
+            render();
+            showToast('تم حفظ التعديل بنجاح!');
+        } else {
+            showToast('لا يمكن أن تكون التغريدة المحسنة فارغة!');
         }
+    }
 
-        render();
-    </script>
-</body>
-</html>
+    function deleteTweet(account, index) {
+        if (confirm('هل أنت متأكد من حذف هذا العنصر؟')) {
+            tweetsData[account].splice(index, 1);
+            saveData();
+            render();
+            showToast('تم حذف العنصر بنجاح.');
+        }
+    }
+
+    render();
+</script>
